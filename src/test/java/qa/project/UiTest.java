@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static org.testng.Assert.assertTrue;
 
 
-public class UItesting {
+public class UiTest {
 
     @BeforeMethod
     public void beforeMethod() {
