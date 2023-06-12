@@ -2,17 +2,12 @@ package qa.project;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.collections.SizeGreaterThan;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import qa.project.pages.BasePage;
 import qa.project.pages.CartModal;
 
-import java.time.Duration;
 
-import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
-import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Selenide.*;
 import static org.testng.Assert.assertTrue;
@@ -45,11 +40,12 @@ public class UItesting {
         $("rz-widget-list:nth-child(2)").click();
         $("h1").shouldHave(partialText("Apple"));
     }
+
     @Test
     public void Task3() {
         BasePage.search.setValue("iphone 13").pressEnter();
         $("rz-selected-filters > div > ul > li:nth-child(3)").shouldHave(Condition.text("iPhone 13"));
-      //  $("rz-filter-stack > div:nth-child(1)").click();
+        //  $("rz-filter-stack > div:nth-child(1)").click();
         int firstResult = Integer.parseInt($("rz-catalog-settings > div > rz-selected-filters > div > p").getText().replaceAll("\\D+", ""));
         sleep(5000);
         $("rz-filter-stack > div:nth-child(1)").click();
@@ -57,6 +53,7 @@ public class UItesting {
         assertTrue(firstResult == secondResult, "firstResult is not = then secondResult");
 
     }
+
     @Test
     public void Task4() {
         BasePage.search.setValue("iphone").pressEnter();
@@ -66,6 +63,7 @@ public class UItesting {
         $("rz-grid > ul > li:nth-child(1) > rz-catalog-tile").getSize().getHeight();
         $("rz-grid > ul > li:nth-child(1) > rz-catalog-tile").getSize().getWidth();
     }
+
     @Test
     public void Task5() {
         BasePage.search.setValue("iphone").pressEnter();
