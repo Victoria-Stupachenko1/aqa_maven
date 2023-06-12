@@ -4,8 +4,6 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import qa.project.pages.BasePage;
-import qa.project.pages.CartModal;
 
 
 import static com.codeborne.selenide.Condition.partialText;
