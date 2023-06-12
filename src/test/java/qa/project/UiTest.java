@@ -4,6 +4,8 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import qa.project.pages.BasePage;
+import qa.project.pages.CartModal;
 
 
 import static com.codeborne.selenide.Condition.partialText;
@@ -43,7 +45,6 @@ public class UiTest {
     public void Task3() {
         BasePage.search.setValue("iphone 13").pressEnter();
         $("rz-selected-filters > div > ul > li:nth-child(3)").shouldHave(Condition.text("iPhone 13"));
-        //  $("rz-filter-stack > div:nth-child(1)").click();
         int firstResult = Integer.parseInt($("rz-catalog-settings > div > rz-selected-filters > div > p").getText().replaceAll("\\D+", ""));
         sleep(5000);
         $("rz-filter-stack > div:nth-child(1)").click();
