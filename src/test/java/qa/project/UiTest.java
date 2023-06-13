@@ -6,8 +6,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import qa.project.pages.BasePage;
 import qa.project.pages.CartModal;
-
-
+import com.codeborne.selenide.SelenideElement;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Selenide.*;
 import static org.testng.Assert.assertTrue;
@@ -55,7 +55,7 @@ public class UiTest {
 
     @Test
     public void Task4() {
-        BasePage.search.setValue("iphone").pressEnter();
+        BasePage.search.setValue("iphone 13").pressEnter();
         $("rz-grid > ul > li:nth-child(1) > rz-catalog-tile").getSize().getHeight();
         $("rz-grid > ul > li:nth-child(1) > rz-catalog-tile").getSize().getWidth();
         $("rz-view-switch > div > button:nth-child(1)").click();
