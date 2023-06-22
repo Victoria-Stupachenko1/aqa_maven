@@ -2,11 +2,17 @@ package qa.project;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import qa.project.pages.BasePage;
+import org.testng.reporters.jq.Main;
+import qa.project.pages.Filters;
+import qa.project.pages.MainPage;
 import qa.project.pages.CartModal;
-import com.codeborne.selenide.SelenideElement;
+import qa.project.pages.SearchResult;
+
+import java.time.Duration;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Selenide.*;
@@ -17,59 +23,60 @@ public class UiTest {
 
     @BeforeMethod
     public void beforeMethod() {
-        open("https://rozetka.com.ua/");
+        open("https://rozetka.com.ua/ua/");
     }
 
-    @Test
+    @Test(description = "Add and delete product from a cart")
     public void Task1() {
-        BasePage.cart.shouldNotBe(Condition.attribute("header__button--active"));
-        BasePage.search.setValue("iphone").pressEnter();
-        $("li:nth-child(1) app-buy-button").click();
-        $(".badge.badge--green.ng-star-inserted").shouldHave(Condition.text("1"));
-        BasePage.cart.click();
+        MainPage.cart.shouldNotBe(Condition.attribute("header__button--active"));
+        MainPage.search.setValue("iphone").pressEnter();
+        SearchResult.productIphone.click();
+        MainPage.cartGreenBadge.shouldHave(Condition.text("1"));
+        MainPage.cart.click();
         CartModal.cartModal.shouldHave(CollectionCondition.size(1));
-        $("#cartProductActions0").doubleClick();
+        CartModal.cartProductAction.doubleClick();
         CartModal.cartModal.shouldHave(CollectionCondition.size(0));
     }
 
-    @Test
+    @Test(description = "Check categories for 'Apple' search")
     public void Task2() {
-        BasePage.search.setValue("Apple");
-        $("div form > button").click();
-        $$("rz-list-tile > div").shouldHave(CollectionCondition.size(20));
-        $("rz-widget-list:nth-child(2)").click();
-        $("h1").shouldHave(partialText("Apple"));
+        MainPage.search.setValue("Apple");
+        MainPage.searchButton.click();
+        SearchResult.appleCategory.shouldHave(CollectionCondition.size(20));
+        SearchResult.clickFirstAppleCategory.click();
+        SearchResult.title.shouldHave(partialText("Apple"));
     }
 
-    @Test
+    @Test(description = "Check filters 'iphone 13' and reseller 'Rozetka'")
     public void Task3() {
-        BasePage.search.setValue("iphone 13").pressEnter();
-        $("rz-selected-filters > div > ul > li:nth-child(3)").shouldHave(Condition.text("iPhone 13"));
-        int firstResult = Integer.parseInt($("rz-catalog-settings > div > rz-selected-filters > div > p").getText().replaceAll("\\D+", ""));
-        sleep(5000);
-        $("rz-filter-stack > div:nth-child(1)").click();
-        int secondResult = Integer.parseInt($("rz-catalog-settings > div > rz-selected-filters > div > p").getText().replaceAll("\\D+", ""));
-        assertTrue(firstResult == secondResult, "firstResult is not = then secondResult");
+        MainPage.search.setValue("Xiaomi").pressEnter();
+        Filters.filterXiaomi.shouldHave(Condition.text("Xiaomi"));
+        int firstResult = Integer.parseInt(SearchResult.titleTotalProducts.getText().replaceAll("\\D+", ""));
+        SearchResult.preloader.shouldNotBe(Condition.visible, Duration.ofSeconds(10000));
+        Filters.sellerRozetka.click();
+        int secondResult = Integer.parseInt(SearchResult.titleTotalProducts.getText().replaceAll("\\D+", ""));
+        assertTrue(firstResult > secondResult, "firstResult is = secondResult");
 
     }
 
-    @Test
+    @Test(description = "Assert size of product tab")
     public void Task4() {
-        BasePage.search.setValue("iphone 13").pressEnter();
-        $("rz-grid > ul > li:nth-child(1) > rz-catalog-tile").getSize().getHeight();
-        $("rz-grid > ul > li:nth-child(1) > rz-catalog-tile").getSize().getWidth();
-        $("rz-view-switch > div > button:nth-child(1)").click();
-        $("rz-grid > ul > li:nth-child(1) > rz-catalog-tile").getSize().getHeight();
-        $("rz-grid > ul > li:nth-child(1) > rz-catalog-tile").getSize().getWidth();
+        MainPage.search.setValue("iphone 13").pressEnter();
+        SearchResult.productTabSize.getSize().getHeight();
+        SearchResult.productTabSize.getSize().getWidth();
+        Filters.gridView.click();
+        SearchResult.productTabSize.getSize().getHeight();
+        SearchResult.productTabSize.getSize().getWidth();
     }
 
-    @Test
+    @Test(description = "Check fiter 'from higher prices to lower’")
     public void Task5() {
-        BasePage.search.setValue("iphone").pressEnter();
-        $("rz-catalog-settings > div > rz-sort > select").selectOption("Від дорогих до дешевих");
-        sleep(5000);
-        int firstNumber = Integer.parseInt($("li:nth-child(1) div.goods-tile__prices span.goods-tile__price-value").getText().replaceAll("\\D+", ""));
-        int secondNumber = Integer.parseInt($("li:nth-child(3) div.goods-tile__prices span.goods-tile__price-value").getText().replaceAll("\\D+", ""));
+        MainPage.search.setValue("iphone").pressEnter();
+        Filters.expensiveToCheap.click();
+        Filters.expensiveToCheap.selectOption("Від дорогих до дешевих");
+        SearchResult.preloader.shouldNotBe(Condition.visible, Duration.ofSeconds(10000));
+        int firstNumber = Integer.parseInt(SearchResult.firstProduct.getText().replaceAll("\\D+", ""));
+        int secondNumber = Integer.parseInt(SearchResult.secondProduct.getText().replaceAll("\\D+", ""));
         assertTrue(firstNumber > secondNumber, "firstNumber is not > then secondNumber");
     }
 }
