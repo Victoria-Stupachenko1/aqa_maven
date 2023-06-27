@@ -2,10 +2,8 @@ package qa.project;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.testng.reporters.jq.Main;
 import qa.project.pages.Filters;
 import qa.project.pages.MainPage;
 import qa.project.pages.CartModal;
@@ -13,7 +11,6 @@ import qa.project.pages.SearchResult;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Selenide.*;
 import static org.testng.Assert.assertTrue;
@@ -21,7 +18,7 @@ import static org.testng.Assert.assertTrue;
 
 public class UiTest {
 
-    @BeforeMethod
+    @BeforeMethod (description = "Open main page")
     public void beforeMethod() {
         open("https://rozetka.com.ua/ua/");
     }
@@ -29,7 +26,7 @@ public class UiTest {
     @Test(description = "Add and delete product from a cart")
     public void Task1() {
         MainPage.cart.shouldNotBe(Condition.attribute("header__button--active"));
-        MainPage.search.setValue("iphone").pressEnter();
+        MainPage.search("iphone");
         SearchResult.productIphone.click();
         MainPage.cartGreenBadge.shouldHave(Condition.text("1"));
         MainPage.cart.click();
@@ -40,7 +37,7 @@ public class UiTest {
 
     @Test(description = "Check categories for 'Apple' search")
     public void Task2() {
-        MainPage.search.setValue("Apple");
+        MainPage.search("Apple");
         MainPage.searchButton.click();
         SearchResult.appleCategory.shouldHave(CollectionCondition.size(20));
         SearchResult.clickFirstAppleCategory.click();
@@ -49,7 +46,7 @@ public class UiTest {
 
     @Test(description = "Check filters 'iphone 13' and reseller 'Rozetka'")
     public void Task3() {
-        MainPage.search.setValue("Xiaomi").pressEnter();
+        MainPage.search("Xiaomi");
         Filters.filterXiaomi.shouldHave(Condition.text("Xiaomi"));
         int firstResult = Integer.parseInt(SearchResult.titleTotalProducts.getText().replaceAll("\\D+", ""));
         SearchResult.preloader.shouldNotBe(Condition.visible, Duration.ofSeconds(10000));
@@ -61,7 +58,7 @@ public class UiTest {
 
     @Test(description = "Assert size of product tab")
     public void Task4() {
-        MainPage.search.setValue("iphone 13").pressEnter();
+        MainPage.search("iphone 13");
         SearchResult.productTabSize.getSize().getHeight();
         SearchResult.productTabSize.getSize().getWidth();
         Filters.gridView.click();
@@ -71,7 +68,7 @@ public class UiTest {
 
     @Test(description = "Check fiter 'from higher prices to lower’")
     public void Task5() {
-        MainPage.search.setValue("iphone").pressEnter();
+        MainPage.search("iphone");
         Filters.expensiveToCheap.click();
         Filters.expensiveToCheap.selectOption("Від дорогих до дешевих");
         SearchResult.preloader.shouldNotBe(Condition.visible, Duration.ofSeconds(10000));
