@@ -4,6 +4,8 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
+import java.time.Duration;
+
 import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -11,7 +13,8 @@ import static com.codeborne.selenide.Selenide.$$;
 public class SearchResult {
     public static SelenideElement productIphone = $("li:nth-child(1) app-buy-button");
     public static ElementsCollection appleCategory = $$("rz-list-tile > div");
-    public static SelenideElement clickFirstAppleCategory = $("rz-widget-list:nth-child(2)");
+   // public static SelenideElement clickFirstAppleCategory = $("rz-widget-list:nth-child(2)");
+    public static SelenideElement clickFirstAppleCategory = $("div:nth-child(3) > rz-dynamic-widgets > rz-widget-list:nth-child(2) > section > ul > li:nth-child(1)");
     public static SelenideElement title = $("h1");
     public static SelenideElement titleTotalProducts = $("div:nth-child(1) > div > rz-selected-filters > div > p");
 

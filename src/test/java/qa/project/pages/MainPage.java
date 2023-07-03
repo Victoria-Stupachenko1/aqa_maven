@@ -14,18 +14,26 @@ public class MainPage {
 
     public static SelenideElement searchButton = $("div form > button");
 
-       public static void search(String value) {
+    public static void search(String value) {
         search.setValue(value).pressEnter();
     }
+
+    public static void search2(String value) {
+        search.setValue(value);
+    }
+
     public static void checkProductInCart(int count) {
         cartGreenBadge.shouldHave(Condition.text(String.valueOf(count)));
     }
+
     public static void openCart() {
         cart.click();
     }
+
     public static void cartIconEmpty() {
         cart.shouldNotBe(Condition.attribute("header__button--active"));
     }
+
     public static void searchButtonClick() {
         searchButton.click();
     }
