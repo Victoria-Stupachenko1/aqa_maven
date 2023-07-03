@@ -1,5 +1,6 @@
 package qa.project.pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -15,6 +16,18 @@ public class MainPage {
 
        public static void search(String value) {
         search.setValue(value).pressEnter();
+    }
+    public static void checkProductInCart(int count) {
+        cartGreenBadge.shouldHave(Condition.text(String.valueOf(count)));
+    }
+    public static void openCart() {
+        cart.click();
+    }
+    public static void cartIconEmpty() {
+        cart.shouldNotBe(Condition.attribute("header__button--active"));
+    }
+    public static void searchButtonClick() {
+        searchButton.click();
     }
 
 

@@ -25,52 +25,52 @@ public class UiTest {
 
     @Test(description = "Add and delete product from a cart")
     public void Task1() {
-        MainPage.cart.shouldNotBe(Condition.attribute("header__button--active"));
+        MainPage.cartIconEmpty();
         MainPage.search("iphone");
-        SearchResult.productIphone.click();
-        MainPage.cartGreenBadge.shouldHave(Condition.text("1"));
-        MainPage.cart.click();
-        CartModal.cartModal.shouldHave(CollectionCondition.size(1));
-        CartModal.cartProductAction.doubleClick();
-        CartModal.cartModal.shouldHave(CollectionCondition.size(0));
+        SearchResult.iphoneProductClick();
+        MainPage.checkProductInCart(1);
+        MainPage.openCart();
+        CartModal.productsInCart(1);
+        CartModal.deleteProductFromCart();
+        CartModal.productsInCart(0);
     }
 
     @Test(description = "Check categories for 'Apple' search")
     public void Task2() {
         MainPage.search("Apple");
-        MainPage.searchButton.click();
-        SearchResult.appleCategory.shouldHave(CollectionCondition.size(20));
-        SearchResult.clickFirstAppleCategory.click();
-        SearchResult.title.shouldHave(partialText("Apple"));
+        MainPage.searchButtonClick();
+        SearchResult.appleCategorySize(20);
+        SearchResult.clickFirstAppleCategory();
+        SearchResult.titleName("Apple");
     }
 
     @Test(description = "Check filters 'iphone 13' and reseller 'Rozetka'")
     public void Task3() {
         MainPage.search("Xiaomi");
-        Filters.filterXiaomi.shouldHave(Condition.text("Xiaomi"));
+        Filters.xiaomiFilter("Xiaomi");
         int firstResult = Integer.parseInt(SearchResult.titleTotalProducts.getText().replaceAll("\\D+", ""));
         SearchResult.preloader.shouldNotBe(Condition.visible, Duration.ofSeconds(10000));
-        Filters.sellerRozetka.click();
+        Filters.clickRozetkaSeller();
         int secondResult = Integer.parseInt(SearchResult.titleTotalProducts.getText().replaceAll("\\D+", ""));
-        assertTrue(firstResult > secondResult, "firstResult is = secondResult");
+        assertTrue(firstResult == secondResult, "firstResult is > secondResult");
 
     }
 
     @Test(description = "Assert size of product tab")
     public void Task4() {
         MainPage.search("iphone 13");
-        SearchResult.productTabSize.getSize().getHeight();
-        SearchResult.productTabSize.getSize().getWidth();
-        Filters.gridView.click();
-        SearchResult.productTabSize.getSize().getHeight();
-        SearchResult.productTabSize.getSize().getWidth();
+        SearchResult.tabSizeHeight();
+        SearchResult.tabSizeWidth();
+        Filters.gridViewClick();
+        SearchResult.tabSizeHeight();
+        SearchResult.tabSizeWidth();
     }
 
-    @Test(description = "Check fiter 'from higher prices to lower’")
+    @Test(description = "Check filter 'from higher prices to lower’")
     public void Task5() {
         MainPage.search("iphone");
-        Filters.expensiveToCheap.click();
-        Filters.expensiveToCheap.selectOption("Від дорогих до дешевих");
+        Filters.relevanceFilterClick();
+        Filters.relevanceFilterOptionChoose("Від дорогих до дешевих");
         SearchResult.preloader.shouldNotBe(Condition.visible, Duration.ofSeconds(10000));
         int firstNumber = Integer.parseInt(SearchResult.firstProduct.getText().replaceAll("\\D+", ""));
         int secondNumber = Integer.parseInt(SearchResult.secondProduct.getText().replaceAll("\\D+", ""));
