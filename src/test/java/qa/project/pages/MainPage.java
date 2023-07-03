@@ -18,7 +18,7 @@ public class MainPage {
         search.setValue(value).pressEnter();
     }
 
-    public static void search2(String value) {
+    public static void searchNoEnter(String value) {
         search.setValue(value);
     }
 

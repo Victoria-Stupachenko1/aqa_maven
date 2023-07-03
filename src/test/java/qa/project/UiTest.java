@@ -37,7 +37,7 @@ public class UiTest {
 
     @Test(description = "Check categories for 'Apple' search")
     public void Task2() {
-        MainPage.search2("Apple");
+        MainPage.searchNoEnter("Apple");
         MainPage.searchButtonClick();
         SearchResult.appleCategorySize(20);
         SearchResult.clickFirstAppleCategory();
