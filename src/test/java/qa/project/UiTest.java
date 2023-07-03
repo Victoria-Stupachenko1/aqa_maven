@@ -27,6 +27,7 @@ public class UiTest {
     public void Task1() {
         MainPage.cartIconEmpty();
         MainPage.search("iphone");
+        SearchResult.preloader.shouldNotBe(Condition.visible, Duration.ofSeconds(10000));
         SearchResult.iphoneProductClick();
         MainPage.checkProductInCart(1);
         MainPage.openCart();
