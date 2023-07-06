@@ -1,17 +1,13 @@
 package qa.project;
-
-import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import qa.project.pages.Filters;
 import qa.project.pages.MainPage;
 import qa.project.pages.CartModal;
 import qa.project.pages.SearchResult;
-
 import java.time.Duration;
-
-import static com.codeborne.selenide.Condition.partialText;
 import static com.codeborne.selenide.Selenide.*;
 import static org.testng.Assert.assertTrue;
 
@@ -27,7 +23,7 @@ public class UiTest {
     public void Task1() {
         MainPage.cartIconEmpty();
         MainPage.search("iphone");
-        SearchResult.preloader.shouldNotBe(Condition.visible, Duration.ofSeconds(10000));
+        SearchResult.waitForSearchResultLoaded();
         SearchResult.iphoneProductClick();
         MainPage.checkProductInCart(1);
         MainPage.openCart();
@@ -40,6 +36,7 @@ public class UiTest {
     public void Task2() {
         MainPage.searchNoEnter("Apple");
         MainPage.searchButtonClick();
+        SearchResult.waitForSearchResultLoaded();
         SearchResult.appleCategorySize(20);
         SearchResult.clickFirstAppleCategory();
         SearchResult.titleName("Apple");
@@ -60,11 +57,13 @@ public class UiTest {
     @Test(description = "Assert size of product tab")
     public void Task4() {
         MainPage.search("iphone 13");
-        SearchResult.tabSizeHeight();
-        SearchResult.tabSizeWidth();
+        int initialHeight = SearchResult.tabSizeHeight();
+        int initialWidth = SearchResult.tabSizeWidth();
         Filters.gridViewClick();
-        SearchResult.tabSizeHeight();
-        SearchResult.tabSizeWidth();
+        int gridHeight = SearchResult.tabSizeHeight();
+        int gridWidth = SearchResult.tabSizeWidth();
+        Assert.assertNotEquals(initialHeight, gridHeight, "Height should differ after changing to grid view");
+        Assert.assertNotEquals(initialWidth, gridWidth, "Width should differ after changing to grid view");
     }
 
     @Test(description = "Check filter 'from higher prices to lower’")
