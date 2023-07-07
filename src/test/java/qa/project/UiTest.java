@@ -1,5 +1,5 @@
 package qa.project;
-import com.codeborne.selenide.Condition;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -7,14 +7,14 @@ import qa.project.pages.Filters;
 import qa.project.pages.MainPage;
 import qa.project.pages.CartModal;
 import qa.project.pages.SearchResult;
-import java.time.Duration;
+
 import static com.codeborne.selenide.Selenide.*;
 import static org.testng.Assert.assertTrue;
 
 
 public class UiTest {
 
-    @BeforeMethod (description = "Open main page")
+    @BeforeMethod(description = "Open main page")
     public void beforeMethod() {
         open("https://rozetka.com.ua/ua/");
     }
@@ -46,11 +46,12 @@ public class UiTest {
     public void Task3() {
         MainPage.search("Xiaomi");
         Filters.categoryProductFilter("Xiaomi");
-        int firstResult = Integer.parseInt(SearchResult.titleTotalProducts.getText().replaceAll("\\D+", ""));
-        SearchResult.preloader.shouldNotBe(Condition.visible, Duration.ofSeconds(10000));
+        int firstResult = SearchResult.getTitleTotalProducts();
+        SearchResult.waitForSearchResultLoaded();
         Filters.clickRozetkaSeller();
-        int secondResult = Integer.parseInt(SearchResult.titleTotalProducts.getText().replaceAll("\\D+", ""));
-        assertTrue(firstResult == secondResult, "firstResult is > secondResult");
+        SearchResult.waitForSearchResultLoaded();
+        int secondResult = SearchResult.getTitleTotalProducts();
+        assertTrue(firstResult > secondResult, "firstResult is = secondResult");
 
     }
 
@@ -71,9 +72,9 @@ public class UiTest {
         MainPage.search("iphone");
         Filters.relevanceFilterClick();
         Filters.relevanceFilterOptionChoose("Від дорогих до дешевих");
-        SearchResult.preloader.shouldNotBe(Condition.visible, Duration.ofSeconds(10000));
-        int firstNumber = Integer.parseInt(SearchResult.firstProduct.getText().replaceAll("\\D+", ""));
-        int secondNumber = Integer.parseInt(SearchResult.secondProduct.getText().replaceAll("\\D+", ""));
+        SearchResult.waitForSearchResultLoaded();
+        int firstNumber = SearchResult.getProductPrice(0);
+        int secondNumber = SearchResult.getProductPrice(1);
         assertTrue(firstNumber > secondNumber, "firstNumber is not > then secondNumber");
     }
 }
