@@ -45,7 +45,7 @@ public class UiTest {
     @Test(description = "Check filters 'iphone 13' and reseller 'Rozetka'")
     public void Task3() {
         MainPage.search("Xiaomi");
-        Filters.xiaomiFilter("Xiaomi");
+        Filters.categoryProductFilter("Xiaomi");
         int firstResult = Integer.parseInt(SearchResult.titleTotalProducts.getText().replaceAll("\\D+", ""));
         SearchResult.preloader.shouldNotBe(Condition.visible, Duration.ofSeconds(10000));
         Filters.clickRozetkaSeller();
